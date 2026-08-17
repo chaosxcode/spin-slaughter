@@ -288,90 +288,73 @@ img{ max-width:100%; display:block; }
 @media (max-width:900px){ .band__head{ grid-template-columns:1fr; align-items:start; } }
 
 /* ============================================================
-   GAME CELLS
+   GAME TILES — art leads; the title is already inside the art,
+   so the caption stays small and mono rather than repeating it.
    ============================================================ */
-.reelgrid{
+.tilegrid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:1px;
-  background:rgba(239,229,214,.14);
-  border:1px solid rgba(239,229,214,.14);
+  gap:clamp(1rem,2.2vw,1.9rem);
 }
-@media (max-width:900px){ .reelgrid{ grid-template-columns:repeat(2,1fr); } }
-@media (max-width:600px){ .reelgrid{ grid-template-columns:1fr; } }
+@media (max-width:900px){ .tilegrid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:430px){ .tilegrid{ grid-template-columns:1fr; } }
 
-.cell{
-  background:var(--ink);
-  padding:1.6rem 1.5rem 1.7rem;
-  position:relative;
+.tile{
   display:flex;
   flex-direction:column;
-  min-height:15rem;
   text-decoration:none;
-  transition:background .25s;
+  transition:transform .28s cubic-bezier(.2,.7,.3,1);
 }
-.cell:hover{ background:var(--bruise); }
+.tile:hover{ transform:translateY(-7px); }
 
-.cell__no{
-  position:absolute;
-  right:.5rem; top:-.6rem;
-  font-family:var(--f-display);
-  font-weight:800;
-  font-size:8.5rem;
-  line-height:1;
-  color:rgba(239,229,214,.075);
-  pointer-events:none;
-  transition:color .25s, transform .25s;
-}
-.cell:hover .cell__no{ color:rgba(216,35,42,.28); transform:translateY(-5px); }
-
-.cell__art{
-  aspect-ratio:16/10;
-  margin:-1.6rem -1.5rem 1.3rem;
-  background:var(--bruise);
-  border-bottom:1px solid rgba(239,229,214,.14);
+.tile__art{
+  width:100%;
+  height:auto;          /* without this the height attribute beats aspect-ratio */
+  aspect-ratio:3/4;
   object-fit:cover;
-  width:calc(100% + 3rem);
+  background:var(--bruise);
+  border:1px solid rgba(239,229,214,.16);
+  transition:border-color .28s, box-shadow .28s;
+}
+.tile:hover .tile__art{
+  border-color:var(--blood);
+  box-shadow:0 14px 34px rgba(0,0,0,.55);
 }
 
-.cell__tag{
-  font-family:var(--f-mono);
-  font-size:.62rem;
-  letter-spacing:.2em;
-  text-transform:uppercase;
-  color:var(--gold);
-}
-.cell__name{
-  font-family:var(--f-display);
-  font-weight:800;
-  font-size:clamp(1.7rem,2.6vw,2.3rem);
-  line-height:.95;
-  text-transform:uppercase;
-  margin:.55rem 0 .55rem;
-  position:relative;
-}
-.cell__desc{
-  font-size:.92rem;
-  color:var(--bone-dim);
-  margin:0 0 1.2rem;
-  line-height:1.6;
-  max-width:34ch;
-}
-.cell__spec{
-  margin-top:auto;
+.tile__bar{
   display:flex;
-  flex-wrap:wrap;
-  gap:.4rem 1.2rem;
-  padding-top:1rem;
-  border-top:1px solid rgba(239,229,214,.14);
+  align-items:baseline;
+  gap:.6rem;
+  margin-top:.95rem;
+}
+.tile__no{
   font-family:var(--f-mono);
   font-size:.66rem;
+  letter-spacing:.1em;
+  color:var(--blood);
+}
+.tile__name{
+  font-family:var(--f-mono);
+  font-size:.72rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--bone);
+}
+.tile__spec{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.3rem .9rem;
+  margin-top:.5rem;
+  padding-top:.6rem;
+  border-top:1px solid rgba(239,229,214,.14);
+  font-family:var(--f-mono);
+  font-size:.63rem;
   letter-spacing:.1em;
   text-transform:uppercase;
   color:var(--bone-dim);
 }
-.cell__spec b{ color:var(--bone); font-weight:400; }
-.cell__play{ margin-left:auto; color:var(--gold); }
+.tile__spec b{ color:var(--bone); font-weight:400; }
+.tile__play{ margin-left:auto; color:var(--gold); }
 
 /* ============================================================
    CAPABILITY LIST
@@ -568,61 +551,46 @@ img{ max-width:100%; display:block; }
     </div>
 
     <!-- ══════════════════════════════════════════════════════
-         EDIT HERE — one block per game.
-         Link pattern: https://stake.com/casino/games/spinslaughter-<kebab-title>
-         To add art: drop <img class="cell__art" src="art/01.jpg" alt="">
-         as the first child inside the <a>.
-         RTP and max win are deliberately absent until real figures
-         are confirmed — do not publish invented numbers.
+         Titles, slugs and cover art read from the live Stake.com
+         group page. RTP is 100 minus the house edge Stake publishes
+         on each game page (3.50%, except Gold Digga at 3.35%).
          ══════════════════════════════════════════════════════ -->
-    <div class="reelgrid rise">
+    <div class="tilegrid rise">
 
-      <a class="cell" href="https://stake.com/casino/games/spinslaughter-hades-spins" target="_blank" rel="noopener">
-        <span class="cell__no">01</span>
-        <span class="cell__tag">Slot</span>
-        <h3 class="cell__name">Hades Spins</h3>
-        <p class="cell__desc">[HOOK — one line on the mechanic or the world]</p>
-        <span class="cell__spec"><span>Volatility <b>Low–Mid</b></span><span class="cell__play">Play ↗</span></span>
+      <a class="tile" href="https://stake.com/casino/games/spinslaughter-hades-spins" target="_blank" rel="noopener">
+        <img class="tile__art" src="art/hades-spins.jpg" alt="Hades Spins cover art" width="408" height="544" loading="lazy">
+        <span class="tile__bar"><span class="tile__no">01</span><span class="tile__name">Hades Spins</span></span>
+        <span class="tile__spec"><span>RTP <b>96.50%</b></span><span>Vol <b>Low–Mid</b></span><span class="tile__play">Play ↗</span></span>
       </a>
 
-      <a class="cell" href="https://stake.com/casino/games/spinslaughter-gold-digga" target="_blank" rel="noopener">
-        <span class="cell__no">02</span>
-        <span class="cell__tag">Slot</span>
-        <h3 class="cell__name">Gold Digga</h3>
-        <p class="cell__desc">[HOOK — one line on the mechanic or the world]</p>
-        <span class="cell__spec"><span>Volatility <b>Extreme</b></span><span class="cell__play">Play ↗</span></span>
+      <a class="tile" href="https://stake.com/casino/games/spinslaughter-super-massive" target="_blank" rel="noopener">
+        <img class="tile__art" src="art/super-massive.jpg" alt="Super Massive cover art" width="408" height="544" loading="lazy">
+        <span class="tile__bar"><span class="tile__no">02</span><span class="tile__name">Super Massive</span></span>
+        <span class="tile__spec"><span>RTP <b>96.50%</b></span><span>Vol <b>Low–Mid</b></span><span class="tile__play">Play ↗</span></span>
       </a>
 
-      <a class="cell" href="https://stake.com/casino/group/spin-slaughter" target="_blank" rel="noopener">
-        <span class="cell__no">03</span>
-        <span class="cell__tag">Slot</span>
-        <h3 class="cell__name">[Title 03]</h3>
-        <p class="cell__desc">[HOOK — one line on the mechanic or the world]</p>
-        <span class="cell__spec"><span>Volatility <b>Low–Mid</b></span><span class="cell__play">Play ↗</span></span>
+      <a class="tile" href="https://stake.com/casino/games/spinslaughter-gold-digga" target="_blank" rel="noopener">
+        <img class="tile__art" src="art/gold-digga.jpg" alt="Gold Digga cover art" width="408" height="544" loading="lazy">
+        <span class="tile__bar"><span class="tile__no">03</span><span class="tile__name">Gold Digga</span></span>
+        <span class="tile__spec"><span>RTP <b>96.65%</b></span><span>Vol <b>Extreme</b></span><span class="tile__play">Play ↗</span></span>
       </a>
 
-      <a class="cell" href="https://stake.com/casino/group/spin-slaughter" target="_blank" rel="noopener">
-        <span class="cell__no">04</span>
-        <span class="cell__tag">Slot</span>
-        <h3 class="cell__name">[Title 04]</h3>
-        <p class="cell__desc">[HOOK — one line on the mechanic or the world]</p>
-        <span class="cell__spec"><span>Volatility <b>Low–Mid</b></span><span class="cell__play">Play ↗</span></span>
+      <a class="tile" href="https://stake.com/casino/games/spinslaughter-paws-and-robbers" target="_blank" rel="noopener">
+        <img class="tile__art" src="art/paws-and-robbers.jpg" alt="Paws &amp; Robbers cover art" width="408" height="544" loading="lazy">
+        <span class="tile__bar"><span class="tile__no">04</span><span class="tile__name">Paws &amp; Robbers</span></span>
+        <span class="tile__spec"><span>RTP <b>96.50%</b></span><span>Vol <b>Low–Mid</b></span><span class="tile__play">Play ↗</span></span>
       </a>
 
-      <a class="cell" href="https://stake.com/casino/group/spin-slaughter" target="_blank" rel="noopener">
-        <span class="cell__no">05</span>
-        <span class="cell__tag">Slot</span>
-        <h3 class="cell__name">[Title 05]</h3>
-        <p class="cell__desc">[HOOK — one line on the mechanic or the world]</p>
-        <span class="cell__spec"><span>Volatility <b>Low–Mid</b></span><span class="cell__play">Play ↗</span></span>
+      <a class="tile" href="https://stake.com/casino/games/spinslaughter-pride-blocks" target="_blank" rel="noopener">
+        <img class="tile__art" src="art/pride-blocks.jpg" alt="Pride Blocks cover art" width="408" height="544" loading="lazy">
+        <span class="tile__bar"><span class="tile__no">05</span><span class="tile__name">Pride Blocks</span></span>
+        <span class="tile__spec"><span>RTP <b>96.50%</b></span><span>Vol <b>Low–Mid</b></span><span class="tile__play">Play ↗</span></span>
       </a>
 
-      <a class="cell" href="https://stake.com/casino/group/spin-slaughter" target="_blank" rel="noopener">
-        <span class="cell__no">06</span>
-        <span class="cell__tag">Slot</span>
-        <h3 class="cell__name">[Title 06]</h3>
-        <p class="cell__desc">[HOOK — one line on the mechanic or the world]</p>
-        <span class="cell__spec"><span>Volatility <b>Low–Mid</b></span><span class="cell__play">Play ↗</span></span>
+      <a class="tile" href="https://stake.com/casino/games/spinslaughter-poseidons-tide" target="_blank" rel="noopener">
+        <img class="tile__art" src="art/poseidons-tide.jpg" alt="Poseidon&#39;s Tide cover art" width="408" height="544" loading="lazy">
+        <span class="tile__bar"><span class="tile__no">06</span><span class="tile__name">Poseidon&#39;s Tide</span></span>
+        <span class="tile__spec"><span>RTP <b>96.50%</b></span><span>Vol <b>Low–Mid</b></span><span class="tile__play">Play ↗</span></span>
       </a>
 
     </div>
@@ -647,7 +615,7 @@ img{ max-width:100%; display:block; }
       <div class="cap"><i>02</i><div><h3>Math &amp; simulation</h3><p>Paytables, volatility targets and feature design, built and verified against our own simulation runs.</p></div></div>
       <div class="cap"><i>03</i><div><h3>Front end</h3><p>The game client — reels, feature logic, states and performance. Written and tuned by us.</p></div></div>
       <div class="cap"><i>04</i><div><h3>Sound design</h3><p>Reel stops, win tiers, feature stingers and music beds, scored to the pacing of each title.</p></div></div>
-      <div class="cap"><i>05</i><div><h3>Production</h3><p>Scoping, scheduling and release. Six titles in sixty days is the cadence, not a one-off sprint.</p></div></div>
+      <div class="cap"><i>05</i><div><h3>Production</h3><p>Scoping, scheduling and release. All six titles went from first sketch to live in sixty days.</p></div></div>
       <div class="cap"><i>06</i><div><h3>Certification-ready docs</h3><p>Simulation results and PAR-sheet documentation prepared for every title we ship.</p></div></div>
     </div>
   </div>
